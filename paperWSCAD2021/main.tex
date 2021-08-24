@@ -188,7 +188,14 @@ O \textit{server} selecionado para tal comparativo foi o HP ----------------- \c
 \subsection{Metodologia dos Testes}\label{sec:MetodologiaDosTestes}
 Afim de encontrar cargas proxima ao limite da Raspberry PI, consideramos a documentação como base, onde a mesma demonstra qual seria aproximadamente o limite de tempo de resposta do aplicativo dada a quantidadae de usuário \cite{documentShiny}.
 
-Em um primeiro momento, analisamos o uso mais comum do sw, ou seja, seu uso diario por engenheiros hidricos, a Figura ~\ref{} demonstra o conjunto de ações tomada dentro da aplicação. Com isso utilizamos o pacote \emph{shinyloadtest} para a gravação deste conjunto de passos. 
+Em um primeiro momento, analisamos o uso mais comum do sw, ou seja, seu uso diario por engenheiros hidricos, a Figura ~\ref{usoWebSyhd} demonstra o conjunto de ações tomada dentro da aplicação. Com isso utilizamos o pacote \emph{shinyloadtest} para a gravação deste conjunto de passos. 
+
+\begin{figure}[htbp]
+  \centering 
+  \includegraphics[scale=.4]{paperWSCAD2021/figures/usoWebSyhda.png}
+  \caption{Exemplo dos passos seguido pelo usuario}
+  \label{usoWebSyhda}
+\end{figure}
 
 Inicialmente partimos com um conjunto de execuções teste afim de entender o simulador e as possibilidades fornecidas por ele. Seguindo as indicações da documentação e observando o tempo comum de trabalho de um usuário do \emph{WebSyhda}, concluimos que %mudar isso
 XX minutos de tempo de execução da ferramenta era suficiente para nossa coleta.
