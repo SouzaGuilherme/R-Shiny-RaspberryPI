@@ -101,7 +101,7 @@ A plataforma recentemente passou por uma migração para o modelo Web, onde enco
 
 O WebSYHDA permite a importação de dados do Hidroweb/ANA\footnote{ANA: \url{https://dadosabertos.ana.gov.br}}, para dados de vazão, chuva e nível. Estes dados são reconhecidos pela plataforma de forma automática. Outras fontes de dados estão sendo implementadas na plataforma, como BDMEP/INMET\footnote{INMET: \url{https://portal.inmet.gov.br}} e dados oriundos de estações de monitoramento diversas com formatos definidos pelo usuário.
 
-A plataforma em sua versão atual, conta com diversas funcionalidades, bem como: estatísticas descritivas, representações gráficas, testes não paramétricos, análises de sazonalidade, consistência de dados de chuva, curvas IDF, análise de frequência local e análise de frequência regional. Os resultados serão estruturados de forma dinâmica, assim permitindo o manuseio pelo usuário final, permitindo ainda a possibilidade de exportação e salvar o estado atual do projeto. 
+A plataforma em sua versão atual, conta com diversas funcionalidades, bem como: estatísticas descritivas, representações gráficas, testes não paramétricos, consistência de dados de chuva, análise de frequência local e análise de frequência regional. Os resultados serão estruturados de forma dinâmica, assim permitindo o manuseio pelo usuário final, permitindo ainda a possibilidade de exportação e salvar o estado atual do projeto. 
 
 \section{Metodologia} \label{sec:metodologia}
 
@@ -131,7 +131,7 @@ Com isso vale ressaltar que R é uma aplicação de thread único, o que signifi
 
 Para o desenvolvimento de aplicativos \emph{web} fazendo uso da linguagem R, a Rstudio mantém o pacote \emph{Shiny}\footnote{Shiny: \url{https://shiny.rstudio.com}}. Um pacote R que facilita a construção de aplicativos interativos. Permitindo hospedar aplicativos independentes em uma página da web ou incorporá-los em documentos R Markdown ou construir painéis. 
 
-Assim, torna-se possivel apresentar graficos dinamicos e iterativos por meio de pacotes como, ggvis\footnote{ggvis: \url{https://ggvis.rstudio.com/}}, ggiraph\footnote{ggiraph: \url{https://davidgohel.github.io/ggiraph/}}, plotly\footnote{plotly: \url{https://plotly.com/}} entre outros mantidos pela RStudio ou pela comunidade. Permitindo ainda, estender os aplicativos \emph{Shiny} com temas CSS (\emph{Cascading Style Sheets}), \emph{htmlwidgets} e ações JS (\emph{JavaScript}).
+Assim, torna-se possivel apresentar gráficos dinamicos e iterativos por meio de pacotes como, ggvis\footnote{ggvis: \url{https://ggvis.rstudio.com/}}, ggiraph\footnote{ggiraph: \url{https://davidgohel.github.io/ggiraph/}}, plotly\footnote{plotly: \url{https://plotly.com/}} entre outros mantidos pela RStudio ou pela comunidade. Permitindo ainda, estender os aplicativos \emph{Shiny} com temas CSS (\emph{Cascading Style Sheets}), \emph{htmlwidgets} e ações JS (\emph{JavaScript}).
 
 \subsection{Shinycannon} \label{sec:Shinycannon}
 
@@ -186,21 +186,46 @@ O \textit{server} selecionado para tal comparativo foi o HP ----------------- \c
     \end{table}
 
 \subsection{Metodologia dos Testes}\label{sec:MetodologiaDosTestes}
-Afim de encontrar cargas proxima ao limite da Raspberry PI, consideramos a documentação como base, onde a mesma demonstra qual seria aproximadamente o limite de tempo de resposta do aplicativo dada a quantidadae de usuário \cite{documentShiny}.
+A fim de testar o aplicativo no seu estágio atual de desenvolvimento e também encontrar cargas próximas ao limite da Raspberry PI, consideramos a documentação como base, onde a mesma demonstra qual seria aproximadamente o limite de tempo de resposta do aplicativo dada a quantidade de usuários \cite{documentShiny}.
 
-Em um primeiro momento, analisamos o uso mais comum do sw, ou seja, seu uso diario por engenheiros hidricos, a Figura ~\ref{} demonstra o conjunto de ações tomada dentro da aplicação. Com isso utilizamos o pacote \emph{shinyloadtest} para a gravação deste conjunto de passos. 
 
-Inicialmente partimos com um conjunto de execuções teste afim de entender o simulador e as possibilidades fornecidas por ele. Seguindo as indicações da documentação e observando o tempo comum de trabalho de um usuário do \emph{WebSyhda}, concluimos que %mudar isso
-XX minutos de tempo de execução da ferramenta era suficiente para nossa coleta.
+%Em um primeiro momento, analisamos o uso mais comum do sw, ou seja, seu uso diário por engenheiros hídricos, a Figura ~\ref{usoWebSyhda} demonstra o conjunto de ações tomada dentro do aplicativo. Com isso utilizamos o pacote \emph{shinyloadtest}, assim permitindo a gravação deste conjunto de passos. 
+Em um primeiro momento, buscou-se um teste que fosse característico de um fluxo típico de um usuário, fazendo uso de várias técnicas empregadas em diversas análises hidrológicas, porém com foco em tarefas que requerem maior processamento. Optou-se por utilizar o módulo de Análise de Frequência Regional para o teste, visto que o mesmo atende ao critério de uso anterior, assim como a exigência de múltiplos arquivos para computar os resultados. A Figura ~\ref{usoWebSyhda} demonstra o conjunto de ações tomada dentro do aplicativo. Com isso utilizamos o pacote \emph{shinyloadtest}, assim permitindo a gravação deste conjunto de passos. 
 
-%FIGURA
+\begin{figure}[htbp]
+  \centering 
+  \includegraphics[scale=.4]{paperWSCAD2021/figures/useWebSyhdaDrawio.png}
+  \caption{Exemplo dos passos seguido pelo usuário}
+  \label{usoWebSyhda}
+\end{figure}
+
+Inicialmente partimos com um conjunto de execuções teste afim de entender o simulador e as possibilidades fornecidas por ele. Seguindo as indicações da documentação e observando o tempo comum de trabalho de um usuário do \emph{WebSyhda}, concluímos que %mudar isso
+dois minutos representa mais de uma execução do conjunto de passos propostos, o que demonstra uma maior realidade de uso do aplicativo. Assim sendo, utilizamos dois minutos como limite de tempo de execução da ferramenta para nossa coleta.
+
+
 
 %Nesses passos 10 arquivos foram utilizandos ... onde realiza ....
 
-De forma semelhante, realizamos o aumento da carga parcialmente iniciando em um unico trabalhador, logo após passamos a incrementar como demonstrado pela tabela ~\ref{}. Para definição do limite de trabalhadores suportados, seguimos a documentação disponibilizada pela ferramenta, onde a mesma define que aplicativos que continuem sua execução muito tempo após a finalização do script, naturalmente ocasionam em respostas demoradas, assim demontrando a necessidade de recodificação do aplicativo ou até aumento \emph{hardware}. Todo o roteiro de testes e os arquivos necessários para replicação dos testes aqui apresentados, estão disponíveis no GitHub\footnote{GitHub: \url{https://github.com/SouzaGuilherme/research_PI3_R-Shiny-server}}.
+De forma semelhante, realizamos o aumento da carga parcialmente iniciando em um único trabalhador, logo após passamos a incrementar como demonstrado pela tabela ~\ref{tab:workers}. Para definição do limite de trabalhadores suportados, seguimos a documentação disponibilizada pela ferramenta, onde a mesma define que se aplicativos continuar sua execução muito tempo após a finalização do script, naturalmente ocasionam em respostas finais mais demoradas para o usuário final, assim, demonstrando a necessidade de recodificação do aplicativo ou o aumento de requisitos de \emph{hardware}. Todo o roteiro de testes e os arquivos gerados aqui apresentados, estão disponíveis no GitHub\footnote{GitHub: \url{https://github.com/SouzaGuilherme/research_PI3_R-Shiny-server}}.
+
+\begin{table}[htbp]
+\centering
+\label{tab:workers}
+\caption{Número de trabalhadores e tempo de simulação utilizados nos testes}
+\begin{tabular}{c|c|cc}
+\hline
+\multicolumn{2}{c|}{\textbf{Servidor HP}} & \multicolumn{2}{c}{\textbf{Raspberry PI 3}}             \\ \hline
+Trabalhadores     & Tempo                 & \multicolumn{1}{c|}{Trabalhadores} & Tempo              \\ \hline
+1                 & \multirow{3}{*}{2}    & \multicolumn{1}{c|}{1}             & \multirow{3}{*}{2} \\ \cline{1-1} \cline{3-3}
+10                &                       & \multicolumn{1}{c|}{10}            &                    \\ \cline{1-1} \cline{3-3}
+20                &                       & \multicolumn{1}{c|}{20}            &                    \\ \hline
+\end{tabular}
+\end{table}
 
 \section{Resultados} \label{sec:Resultados}
+Após a análise dos resultados obtidos a partir da execução do simulador nos cenários criados, focamos nos resultados de latência máxima de \emph{websocket}, ou seja, tempo de cálculo. Ressaltamos que os resultados aqui apresentados consideram os cenários e o estágio do aplicativo no momento de proposta deste trabalho. Para uma melhor visualização dos resultados, o próprio simulador desconsidera o tempo de aquecimento dos trabalhadores. Todos os resultados, estão disponíveis para consulta no GitHub\footnote{GitHub: \url{https://github.com/SouzaGuilherme/research_PI3_R-Shiny-server}} junto aos fontes.
 
+ 
 
 \section{Conclusão} \label{sec:conlusao}
 
