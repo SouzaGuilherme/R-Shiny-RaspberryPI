@@ -222,22 +222,83 @@ De forma semelhante, realizamos o aumento da carga parcialmente iniciando em um 
 \caption{Número de trabalhadores e tempo de simulação utilizados nos testes}
 \begin{tabular}{c|c|cc}
 \hline
-\multicolumn{2}{c|}{\textbf{Servidor HP}} & \multicolumn{2}{c}{\textbf{Raspberry PI 3}}             \\ \hline
-Trabalhadores     & Tempo                 & \multicolumn{1}{c|}{Trabalhadores} & Tempo              \\ \hline
-1                 & \multirow{3}{*}{2}    & \multicolumn{1}{c|}{1}             & \multirow{3}{*}{2} \\ \cline{1-1} \cline{3-3}
-10                &                       & \multicolumn{1}{c|}{4}            &                    \\ \cline{1-1} \cline{3-3}
-20                &                       & \multicolumn{1}{c|}{}            &                    \\ \hline
+\multicolumn{2}{c|}{\textbf{x64}}           & \multicolumn{2}{c}{\textbf{Raspberry PI3}}                       \\ \hline
+\textbf{Trabalhadores} & \textbf{Minutos}   & \multicolumn{1}{c|}{\textbf{Trabalhadores}} & \textbf{Minutos}   \\ \hline
+1                      & \multirow{4}{*}{2} & \multicolumn{1}{c|}{1}                      & \multirow{4}{*}{2} \\ \cline{1-1} \cline{3-3}
+10        &  & \multicolumn{1}{c|}{2} &  \\ \cline{1-1} \cline{3-3}
+20        &  & \multicolumn{1}{c|}{3} &  \\ \cline{1-1} \cline{3-3}
+\textbf{} &  & \multicolumn{1}{c|}{4} &  \\ \hline
 \end{tabular}
-\label{tab:workers}
 \end{table}
 
 \section{Resultados} \label{sec:Resultados}
 Após a análise dos resultados obtidos a partir da execução do simulador nos cenários criados, focamos nos resultados de latência máxima de \emph{websocket}, ou seja, tempo de cálculo. Ressaltamos que os resultados aqui apresentados consideram os cenários e o estágio do aplicativo no momento de proposta deste trabalho. Para uma melhor visualização dos resultados, o próprio simulador desconsidera o tempo de aquecimento dos trabalhadores. Todos os resultados, estão disponíveis para consulta no GitHub\footnote{GitHub: \url{https://github.com/SouzaGuilherme/research_PI3_R-Shiny-server}} junto aos fontes.
 
-Em um primeiro momento observamos a execucao com somente um trabalhador, Figura ~\ref{}, com o intuito de averiguar seu comportamento com somente um usuario ativo. Podemos obervar que a sessao mais lenta ficou em torno de 5s. Vale resaltar que o simulador reproduz os passos 
+Em um primeiro momento observamos a execução com somente um trabalhador, Figura ~\ref{x64_1wroker}, com o intuito de averiguar seu comportamento com somente um usuário ativo. Podemos observar tanto no \emph{server} quanto na Raspberry PI3, Figura ~\ref{PI3_1wroker}, tendem a ficar ociosos (parte cinza), dada a baixa demanda por cálculos. 
+
+Em uma nova execução aumentando o número de trabalhadores para 10, Figura ~\ref{x64_10wroker}, notamos que no \emph{server} é realizado um bom aproveitamento da ociosidade do servidor. O mesmo acontece quando passa a ter 20 trabalhadores, porém ao observar a Figura ~\ref{x64_20wroker}, notamos pouca ociosidade, assim, não permitindo a execução de novos trabalhadores.
+
+Diferentemente do \emph{server}, dado o pouco poder computacional da Raspberry PI3, seu suporte limite e de quatro trabalhadores, porém ao observarmos a Figura ~\ref{PI3_4wroker}, podemos notar pouco aproveitamento da ociosidade do \emph{hardware}, o mesmo é visível nas execuções anteriores como Figura ~\ref{PI3_2wroker} e ~\ref{PI3_3wroker}.
+
+
+
+\begin{figure}[htbp]
+  \centering 
+  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_x64_1_worker.png}
+  \caption{Resultado da execução do simulador no \emph{server}, tempo demandado em cada evento com 1 \emph{woker}}
+  \label{x64_1wroker}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering 
+  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_x64_10_worker.png}
+  \caption{Resultado da execução do simulador no \emph{server}, tempo demandado em cada evento com 10 \emph{woker}}
+  \label{x64_10wroker}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering 
+  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_x64_20_worker.png}
+  \caption{Resultado da execução do simulador no \emph{server}, tempo demandado em cada evento com 20 \emph{woker}}
+  \label{x64_20wroker}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering 
+  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_1_worker.png}
+  \caption{Resultado da execução do simulador na Raspberry PI3, tempo demandado em cada evento com um \emph{woker}}
+  \label{PI3_1wroker}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering 
+  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_2_worker.png}
+  \caption{Resultado da execução do simulador na Raspberry PI3, tempo demandado em cada evento com um \emph{woker}}
+  \label{PI3_2wroker}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering 
+  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_3_worker.png}
+  \caption{Resultado da execução do simulador na Raspberry PI3, tempo demandado em cada evento com três \emph{woker}}
+  \label{PI3_3wroker}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering 
+  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_4_worker.png}
+  \caption{Resultado da execução do simulador na Raspberry PI3, tempo demandado em cada evento com quatro \emph{woker}}
+  \label{PI3_4wroker}
+\end{figure}
 
 \section{Conclusão} \label{sec:conlusao}
+De acordo a seção anterior, a Raspberry Pi 3 mostrou-se de certa forma eficiente para as execuções de um baixo número de usuários simultâneos, porém sendo pouco aproveitado do tempo de ociosidade do \emph{hardware}, o que permitiria assim, acrescentar mais usuários. 
 
+Semelhantemente o \emph{server} apresentou um bom empenho como esperado para usuários simultâneos. Vale ressaltar que todos os testes aqui executados não contam com técnicas de \emph{tuning} para melhor escalonamento, utilizando assim toda configuração \emph{default} fornecida pela ferramenta, dessa forma, resultados diferentes podem ser obtidos quando melhores explorados.
+
+Com tais dados, pudemos demonstrar a capacidade da Raspberry PI 3 em atender a aplicação de forma pessoal, ou seja, um atendimento interno a poucos usuários simultâneos. Demonstrando também a viabilidade de atendimento a um número maior de usuários, dado a ociosidade do \emph{hardware} quando já alcançado o limite indicado pelo simulador.
+
+Com isso, como trabalhos futuros, pretende-se fazer uso de técnicas de \emph{tuning} para um novo teste de melhor aproveitamento da Raspberry PI3. Também pretende-se propor a recodificação da aplicação utilizando o modelo de arquitetura de micro serviços, dado sua orquestração permitida assim conseguindo escalonar de melhor forma, acredita se conseguir assim, extrair o máximo que o \emph{hardware} tem a oferecer sem a necessidade de reduzir a aplicação. 
 
 
 \bibliographystyle{sbc}
