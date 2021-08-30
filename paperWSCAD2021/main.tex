@@ -40,14 +40,16 @@
 
 \title{Estudo de viabilidade do uso de Raspberry como servidor R-Shiny}
 
-\author{Guilherme de Souza\inst{1}, João Silveira\inst{1}, Giovani Jahn\inst{1}, \\Alfredo Goldman\inst{2}, Gerson Geraldo H. Cavalheiro\inst{1}}
+\author{Guilherme de Souza\inst{1}, João Silveira\inst{1}, Giovani Jahn\inst{1}, \\Alfredo Goldman\inst{2}, Samuel Beskow$^3$, Gerson Geraldo H. Cavalheiro\inst{1}}
 
-\address{Programa de Pós-Graduação em Computação \\Universidade Federal de Pelotas (UFPel)\\
+\address{PPGC ~~~~~~~~~~~~~~~~ $^3$PPCRH \\Universidade Federal de Pelotas (UFPel)\\
   Caixa Postal 354 -- 96010.610 -- Pelotas -- RS -- Brazil
+\nextinstitute
+Programa de Pós-Graduação em Hidrologia e Modelagem Hidrológica\\
 \nextinstitute
   Instituto de Matemática e Estatística (IME) -- Universidade de São Paulo (USP)\\
   Rua do Matão, 1010 -- São Paulo -- SP -- Brazil
-  \email{\{gdsdsilva,jpdmdsilveira, giovani.jahn, gerson.cavalheiro\}@inf.ufpel.edu.br, gold@ime.usp.br}
+  \email{gdsdsilva@inf.ufpel.edu.br}
 }
 
 \begin{document} 
@@ -56,13 +58,12 @@
     
 \en
 \begin{abstract}
-The use of servers is widespread in practically all computing areas. Notwithstanding this, the concern with the search for solutions aimed at reducing energy use is also a reality. In this article, we present the use of a Small Business Computer (SLC), the Raspberry-Pi, as a low-cost alternative to provide application server services developed using the R language together with R-Shiny. To do so, a Raspberry Pi device was configured and compared to its performance, with an X64 architecture server. Scenarios and performance testing tools were applied and, through these, it was possible to evaluate and verify that the small board supports serving a low number of users without the use of any tuning technique, thus confirming the veracity of the initially proposed premise .
+The use of servers is widespread in practically all computing areas. Notwithstanding this, the concern with the search for solutions aimed at reducing energy use is also a reality. In this article, we present the use of a Small Business Computer (SLC), the Raspberry Pi, as a low-cost alternative to provide application server services developed using the R language together with R-Shiny. To do so, a Raspberry Pi device was configured and compared to its performance, with an X64 architecture server. Scenarios and performance testing tools were applied and, through these, it was possible to evaluate and verify that the small board supports serving a low number of users without the use of any tuning techniques, thus confirming the veracity of the initially proposed premise.
 
 \end{abstract}
 
-\br
 \begin{resumo} (rascunho por Giovani)
-O uso de servidores esta difundido em praticamente todas as áreas computacionais. Não obstante a isso, a preocupação com a busca de soluções atentas à redução do uso de energia, também é uma realidade.  Apresentamos neste artigo o uso de um Small Business Computer (SLC), o Raspberry Pi, como uma alternativa de baixo custo para prover serviços de servidor de aplicação desenvolvida utilizando a linguagem R juntamente com R-Shiny. Para tal, um dispositivo Raspberry Pi foi configurado e confrontado quanto a sua performance, com um servidor de arquitetura X64. Cenários e ferramentas de testes de desempenho foram aplicados e, por meio destes, pôde-se avaliar e constatar que a \emph{small board} suporta atender um baixo número de usuários sem a utilização de quaisquer técnica de \emph{tuning}, assim, confirmando a veracidade da premissa inicialmente proposta.
+O uso de servidores esta difundido em praticamente todas as áreas computacionais. Não obstante a isso, a preocupação com a busca de soluções atentas à redução do uso de energia, também é uma realidade.  Apresentamos neste artigo o uso de uma Small Business Computer (SLC), a Raspberry Pi, como uma alternativa de baixo custo para prover serviços de servidor de aplicação desenvolvida utilizando a linguagem R juntamente com R-Shiny. Para tal, um dispositivo Raspberry Pi foi configurado e confrontado quanto a sua performance, com um servidor de arquitetura X64. Cenários e ferramentas de testes de desempenho foram aplicados e, por meio destes, pôde-se avaliar e constatar que a small board suporta atender um baixo número de usuários sem a utilização de quaisquer técnica de tuning, assim, confirmando a veracidade da premissa inicialmente proposta.
 
 
 \end{resumo}
@@ -71,7 +72,7 @@ O uso de servidores esta difundido em praticamente todas as áreas computacionai
 
 \section{Introdução}
 
-A decisão por realizar, ou não, um investimento financeiro passa, muitas vezes, pela análise de uma grande
+A\ups{Total de páginas: \pageref{fimdotexto}} decisão por realizar, ou não, um investimento financeiro passa, muitas vezes, pela análise de uma grande
 massa de dados. Os setores agrícolas e de obras civis possuem situações onde esta análise tem relevada importância, considerando aspectos hidrológicos. No contexto da agricultura, a decisão
 por uma cultura, pelo agricultor, ou pela taxa de juros a ser aplicada, por uma entidade voltada ao
 financiamento rural, depende da análise, entre outros, dos regimes hídricos do local onde a plantação ou
@@ -89,12 +90,12 @@ ferramenta foi projetada para atender diferentes usuários simultaneamente.
 
 Enquanto um serviço R, o suporte de operação do WebSYHDA é realizado de forma convencional pelo servidor Shinyapps.io\footnote{Shinyapps.io: \url{https://www.shinyapps.io/}} . Nessa etapa do trabalho busca-se avaliar as necessidades de
 estrutura física para suportar esse serviço. O presente artigo avalia a escalabilidade em termos de número
-de usuários WebSyhda ativos simultaneamente em dois modelos de arquitetura: um servidor convencional
+de usuários WebSYHDA ativos simultaneamente em dois modelos de arquitetura: um servidor convencional
 e um dispositivo de borda (\emph{small board}). No contexto do trabalho realizado, as métricas de desempenho, que são valores brutos que provem a base para alguma forma de pesquisa ou estudo e podem ser compostos por valores de diversas categorias e formato, tem a finalidade de quantificar objetivamente as funções de coletas de dados de avaliação e desempenho.
 O caso de estudo encaminhado considera o serviço WebSYHDA, desenvolvido com a finalidade de processamento complexo de séries hidrológicas. São consideradas duas plataformas de suporte: um servidor com arquitetura convencional e um dispositivo de baixa capacidade (\emph{small board}). 
 %O objetivo deste estudo é identificar componentes do software, atualmente construído de forma monolítica, na forma de microserviços.
 
-O presente artigo está organizado da seguinte forma: na Seção~\ref{sec:TrabalhosRelacionados} serão apresentados trabalhos relacionados, na Seção~\ref{sec:websyhda} é apresentada a aplicação utilizada como \emph{benchmark}. A Seção~\ref{sec:metodologia} são apresentadas as ferramentas utilizadas para realização dos experimentos. Na Seção~\ref{sec:Resultados}, são descritos os resultados obtidos considerando os cenários representativos. As considerações finais e trabalhos futuros se encontram na Seção~\ref{sec:conlusao}.
+O presente artigo está organizado da seguinte forma: na Seção~\ref{sec:TrabalhosRelacionados} serão apresentados trabalhos relacionados, na Seção~\ref{sec:WebSYHDA} é apresentada a aplicação utilizada como \emph{benchmark}. A Seção~\ref{sec:metodologia} são apresentadas as ferramentas utilizadas para realização dos experimentos. Na Seção~\ref{sec:Resultados}, são descritos os resultados obtidos considerando os cenários representativos. As considerações finais e trabalhos futuros se encontram na Seção~\ref{sec:conlusao}.
 
 \section{Trabalhos Relacionados} \label{sec:TrabalhosRelacionados}
 
@@ -115,7 +116,7 @@ Em \cite{PiConsumo} é evidenciada segue a mesma preocupação com o alto consum
 
 
 
-\section{WebSYHDA}\label{sec:websyhda}
+\section{WebSYHDA}\label{sec:WebSYHDA}
 
 %RASCUNHOOOOOOOOO
 Engenharia e gestão de recursos hídricos mantém uma grande dependência de séries hidrológicas. No entanto, o processamento destas séries é complexo, geralmente dependente de métodos numéricos para resolução, e é suscetível a erros quando feito de forma manualmente. Esses aspectos frequentemente dificultam a elaboração de projetos que depende da análise e estudo de séries hidrológicas. Com isso O Grupo de Pesquisa em Hidrologia e Modelagem Hidrológica em Bacias Hidrográficas/CNPq da UFPEL, propôs, desenvolveu e mantem O \emph{System of Hydrological Data Acquisition and Analysis} ou SYHDA \cite{syhda}.
@@ -142,7 +143,7 @@ Assim, torna-se possivel apresentar gráficos dinâmicos e interativos por meio 
 
 \section{Metodologia} \label{sec:metodologia}
 
-Visto que a demanda de serviços \textit{web} ocupa a maior parte das aplicações na nuvem, maiores são os esforços para otimização das aplicações para um menor consumo de requisitos e rede, mantendo, no entanto, níveis de desempenho aceitáveis aos usuários. Neste trabalho o aspecto tratado é o dimensionamento das necessidades de hardware para atender a demanda de processamento do WebSyhda. O estudo de caso avalia o desempenho obtido com uma arquitetura padrão x64 convencional com uma \emph{smallboard} modelo Raspberry PI 3. O objetivo do estudo é, considerando a natureza sequencial de atendimento às solicitações, determinar se este \emph{smallboard} apresenta a mesma eficiência de atendimento a uma aplicação real, o WebSyhda, que a já observada em trabalhos anteriores  \cite{silva2019estudo}.
+Visto que a demanda de serviços \textit{web} ocupa a maior parte das aplicações na nuvem, maiores são os esforços para otimização das aplicações para um menor consumo de requisitos e rede, mantendo, no entanto, níveis de desempenho aceitáveis aos usuários. Neste trabalho o aspecto tratado é o dimensionamento das necessidades de hardware para atender a demanda de processamento do WebSYHDA. O estudo de caso avalia o desempenho obtido com uma arquitetura padrão x64 convencional com uma \emph{smallboard} modelo Raspberry PI 3. O objetivo do estudo é, considerando a natureza sequencial de atendimento às solicitações, determinar se este \emph{smallboard} apresenta a mesma eficiência de atendimento a uma aplicação real, o WebSYHDA, que a já observada em trabalhos anteriores  \cite{silva2019estudo}.
 
 O procedimento de avaliação empregou a exploração do servidor R nas duas arquiteturas. A carga de trabalho ao qual estes servidores responderam correspondeu a demanda gerada por traços obtidos de consultas reais. A carga foi submetida aos respectivos servidores pela  ferramenta \emph{Shinycannon}, permitindo quantificar o número de usuários suportados e latência do aplicativo.
 
@@ -156,11 +157,11 @@ A ferramenta acompanha o pacote \textit{shinyloadtest}\footnote{Shinyloadtest: \
 \subsection{Hardware}\label{sec:Hardware}
 Com a popularização do uso de serviços providos pela computação em nuvem, o consumo energético dos data centers também aumentou, chegando a 270 TWh em 2012 \cite{VanHeddeghem:2014:TWI:2657027.2657141}, estimando chegar a mais de 2\% do consumo da energia mundial apos 2020 \cite{energy}. Buscando alternativas de evitar esse alto consumo energético das máquinas convencionais utilizadas em data centers, o uso de dispositivos com arquitetura ARM, que possuem baixo consumo energético, são uma das estratégias possíveis.
 
-Neste trabalho, é analisado a capacidade de resposta de um Raspberry PI3 no atendimento aos serviços providos pelo WebSyhda com o oferecido por uma arquitetura x64 convencional. As características destes dois equipamentos são apresentadas na Tabela \ref{tab:specs}. 
+Neste trabalho, é analisado a capacidade de resposta de um Raspberry PI3 no atendimento aos serviços providos pelo WebSYHDA com o oferecido por uma arquitetura x64 convencional. As características destes dois equipamentos são apresentadas na Tabela \ref{tab:specs}. 
 
 \begin{table}[h]
 \centering
-\caption{Especifícação de \textit{hardware} do dispositivo}
+\caption{Especificação de \textit{hardware} do dispositivo}
 \begin{tabular}{c|c|c}
 \hline
 \textbf{Especifícação}            & \textbf{Server x64} & \multicolumn{1}{l}{\textbf{Raspberry PI3}} \\ \hline
@@ -189,7 +190,7 @@ Em um primeiro momento, buscou-se um teste que fosse característico de um fluxo
 % descrição dos passos da Figura 2 (joão)
 \begin{enumerate}[i.]
   \item Importar arquivos. A primeira etapa consistem em importar, para o servidor, um total de 10 arquivos do Hidroweb\footnote{https://www.snirh.gov.br/hidroweb}, contendo dados de vazão da região a ser analisada.
-  \item Aplicação de filtros. Aplicar o limiar de falhas de 31 dias para filtrar as séries. \textcolor{red}{O que significa isso?}
+  \item Aplicar o limiar de falhas de 31 dias, eliminando da série anual os anos onde há mais de 31 falhas (dias sem medição). \textcolor{red}{O que significa isso?}
   \item Constituir séries anuais. Selecionar o período anual para transformar as séries diárias em anuais.
   \item Selecionar arquivos importados. No módulo de Análise de Frequência Regional  é possível selecionar, dentre os arquivos importados, quais serão utilizados na análise. No estudo realizado foram selecionados todos os 10 arquivos.
   \item Análise de frequência regional. Aplicação do modelo. A partir dos dados, são computados os Momentos-L de cada série anual, as medidas de heterogeneidade da região e a sua função regional.
@@ -198,38 +199,23 @@ Em um primeiro momento, buscou-se um teste que fosse característico de um fluxo
 
 \begin{figure}[htbp]
   \centering 
-  \includegraphics[scale=.4]{paperWSCAD2021/figures/useWebSYHDADrawio.png}
+  \includegraphics[scale=.4]{paperWSCAD2021/figures/useWebSYHDADrawio-horizontal.png}
   \caption{Exemplo dos passos seguidos pelo usuário}
   \label{usoWebSYHDA}
 \end{figure}
 
-Inicialmente partimos com um conjunto de execuções teste afim de entender o simulador e as possibilidades fornecidas por ele. Seguindo as indicações da documentação e observando o tempo comum de trabalho de um usuário do \emph{WebSYHDA}, concluímos que o tempo de execução do simulador decorrente de%mudar isso
-dois minutos representam mais de uma execução do conjunto de passos propostos, o que demonstra uma maior realidade de uso do aplicativo. Assim sendo, utilizamos igualmente dois minutos como limite de tempo de execução do simulador para nossa coleta.
-
+Uma aferição inicial mostrou que o tempo de atendimento a uma sessão de usuário, realizando as operações registradas pelo shinyloadtest, é atendido é inferior a dois minutos no servidor implantado na Raspberry. Este tempo representa o tempo de execução tendo o servidor inteiramente dedicado ao usuário. O procedimento de coleta de dados de desempenho considerou a escalabilidade do atendimento ao serviço, coletando dados de desempenho com 1, 10 e 20 usuários simultâneos no server e 1, 2, 3 e 4 usuários simultâneos na Raspeberry, submetendo o mesmo conjunto de operações, dentro de uma janela de, também, 2 minutos.
 
 
 %Nesses passos 10 arquivos foram utilizandos ... onde realiza ....
 
-De forma semelhante, realizamos o aumento da carga parcialmente iniciando em um único trabalhador, logo após passamos a incrementar como demonstrado pela tabela ~\ref{tab:workers}. Para definição do limite de trabalhadores suportados, seguimos a documentação disponibilizada pela ferramenta, onde a mesma define que se aplicativos continuar sua execução muito tempo após a finalização do script, naturalmente ocasionam em respostas finais mais demoradas para o usuário final, assim, demonstrando a necessidade de recodificação do aplicativo ou o aumento de requisitos de \emph{hardware}. Todo o roteiro de testes e os arquivos gerados aqui apresentados, estão disponíveis no GitHub\footnote{GitHub: \url{https://github.com/SouzaGuilherme/research_PI3_R-Shiny-server}}.
-
-\begin{table}[htbp]
-\centering
-\caption{Número de trabalhadores e tempo de simulação utilizados nos testes}
-\begin{tabular}{c|c|cc}
-\hline
-\multicolumn{2}{c|}{\textbf{x64}}           & \multicolumn{2}{c}{\textbf{Raspberry PI3}}                       \\ \hline
-\textbf{Trabalhadores} & \textbf{Minutos}   & \multicolumn{1}{c|}{\textbf{Trabalhadores}} & \textbf{Minutos}   \\ \hline
-1                      & \multirow{4}{*}{2} & \multicolumn{1}{c|}{1}                      & \multirow{4}{*}{2} \\ \cline{1-1} \cline{3-3}
-10        &  & \multicolumn{1}{c|}{2} &  \\ \cline{1-1} \cline{3-3}
-20        &  & \multicolumn{1}{c|}{3} &  \\ \cline{1-1} \cline{3-3}
-\textbf{} &  & \multicolumn{1}{c|}{4} &  \\ \hline
-\end{tabular}
-\end{table}
+O limite de usuários, 20 no server e 4 na Raspberry, foi determinado em função da configuração padrão do servidor R sobre o hardware disponível. Acima deste número de usuários é retornado um código de erro informando a inviabilidade de atendimento. Todo o roteiro de testes e os arquivos gerados aqui apresentados, estão disponíveis no GitHub\footnote{GitHub: \url{https://github.com/SouzaGuilherme/research_PI3_R-Shiny-server}}.
 
 \section{Resultados} \label{sec:Resultados}
-Após a análise dos resultados obtidos a partir da execução do simulador nos cenários criados, focamos nos resultados de latência máxima de \emph{websocket}, ou seja, tempo de cálculo. Ressaltamos que os resultados aqui apresentados consideram os cenários e o estágio do aplicativo no momento de proposta deste trabalho. Para uma melhor visualização dos resultados, o próprio simulador desconsidera o tempo de aquecimento dos trabalhadores. Todos os resultados, estão disponíveis para consulta no GitHub\footnote{GitHub: \url{https://github.com/SouzaGuilherme/research_PI3_R-Shiny-server}} junto aos fontes.
 
-Em um primeiro momento observamos a execução com somente um trabalhador, Figura ~\ref{x64_1wroker}, com o intuito de averiguar seu comportamento com somente um usuário ativo. Podemos observar tanto no \emph{server} quanto na Raspberry PI3, Figura ~\ref{PI3_1wroker}, tendem a ficar ociosos (parte cinza), dada a baixa demanda por cálculos. 
+A análise dos resultados do experimento é focado na avaliação do uso dos recursos de hardware disponível durante o período de tempo em que o número total de usuários simultâneos se encontra ativo. Os gráficos desta seção representam os diferentes estados das sessões executadas pelos diferentes usuários ativos. Nestes gráficos, as linhas representam as sessões e, no plano horizontal, a passagem do tempo. O período de tempo que interessa a análise é aquele entre os instantes de tempo 0~s, representando o momento em que todos os usuários simultâneos encontram-se ativos, e 120~s, que corresponde aos 2 minutos observados de duração da sessão típica considerada. 
+
+Em um primeiro momento observamos a execução com somente um trabalhador, Figura~\ref{x64_1wroker}, com o intuito de averiguar seu comportamento com somente um usuário ativo. Podemos observar tanto no \emph{server} quanto na Raspberry PI3, Figura ~\ref{PI3_1wroker}, tendem a ficar ociosos (parte cinza), dada a baixa demanda por cálculos. 
 
 Em uma nova execução aumentando o número de trabalhadores para 10, Figura ~\ref{x64_10wroker}, notamos que no \emph{server} é realizado um bom aproveitamento da ociosidade do servidor. O mesmo acontece quando passa a ter 20 trabalhadores, porém ao observar a Figura ~\ref{x64_20wroker}, notamos pouca ociosidade, assim, não permitindo a execução de novos trabalhadores.
 
@@ -240,49 +226,52 @@ Diferentemente do \emph{server}, dado o pouco poder computacional da Raspberry P
 \begin{figure}[htbp]
   \centering 
   \includegraphics[scale=.4]{paperWSCAD2021/figures/user_x64_1_worker.png}
-  \caption{Resultado da execução do simulador no \emph{server}, tempo demandado em cada evento com 1 \emph{woker}}
+  \caption{Resultado da execução do simulador no \emph{server}, tempo demandado em cada evento com 1 \emph{worker}}
   \label{x64_1wroker}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering 
   \includegraphics[scale=.4]{paperWSCAD2021/figures/user_x64_10_worker.png}
-  \caption{Resultado da execução do simulador no \emph{server}, tempo demandado em cada evento com 10 \emph{woker}}
+  \caption{Resultado da execução do simulador no \emph{server}, tempo demandado em cada evento com 10 \emph{workers}}
   \label{x64_10wroker}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering 
   \includegraphics[scale=.4]{paperWSCAD2021/figures/user_x64_20_worker.png}
-  \caption{Resultado da execução do simulador no \emph{server}, tempo demandado em cada evento com 20 \emph{woker}}
+  \caption{Resultado da execução do simulador no \emph{server}, tempo demandado em cada evento com 20 \emph{workers}}
   \label{x64_20wroker}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering 
-  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_1_worker.png}
-  \caption{Resultado da execução do simulador na Raspberry PI3, tempo demandado em cada evento com um \emph{woker}}
+  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_1_worker.png}\\(a) 1 usuário
+ \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_2_worker.png}\\(a) 2 usuários
+ \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_3_worker.png}\\(a) 3 usuários
+ \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_4_worker.png}\\(a) 4 usuários
+\caption{Traço de execução do simulador na Raspberry PI3.}
   \label{PI3_1wroker}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering 
   \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_2_worker.png}
-  \caption{Resultado da execução do simulador na Raspberry PI3, tempo demandado em cada evento com um \emph{woker}}
+  \caption{Resultado da execução do simulador na Raspberry PI3, tempo demandado em cada evento com um \emph{worker}}
   \label{PI3_2wroker}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering 
   \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_3_worker.png}
-  \caption{Resultado da execução do simulador na Raspberry PI3, tempo demandado em cada evento com três \emph{woker}}
+  \caption{Resultado da execução do simulador na Raspberry PI3, tempo demandado em cada evento com três \emph{workers}}
   \label{PI3_3wroker}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering 
   \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_4_worker.png}
-  \caption{Resultado da execução do simulador na Raspberry PI3, tempo demandado em cada evento com quatro \emph{woker}}
+  \caption{Resultado da execução do simulador na Raspberry PI3, tempo demandado em cada evento com quatro \emph{workers}}
   \label{PI3_4wroker}
 \end{figure}
 
@@ -293,11 +282,11 @@ Semelhantemente o \emph{server} apresentou um bom empenho como esperado para usu
 
 Com tais dados, pudemos demonstrar a capacidade da Raspberry PI 3 em atender a aplicação de forma pessoal, ou seja, um atendimento interno a poucos usuários simultâneos. Demonstrando também a viabilidade de atendimento a um número maior de usuários, dado a ociosidade do \emph{hardware} quando já alcançado o limite indicado pelo simulador.
 
-Com isso, como trabalhos futuros, pretende-se fazer uso de técnicas de \emph{tuning} para um novo teste de melhor aproveitamento da Raspberry PI3. Também pretende-se propor a recodificação da aplicação utilizando o modelo de arquitetura de micro serviços, dado sua orquestração permitida assim conseguindo escalonar de melhor forma, acredita se conseguir assim, extrair o máximo que o \emph{hardware} tem a oferecer sem a necessidade de reduzir a aplicação. 
+Com isso, como trabalhos futuros, pretende-se fazer uso de técnicas de \emph{tuning} para um novo teste de melhor aproveitamento da Raspberry PI3. Também pretende-se propor a recodificação da aplicação utilizando o modelo de arquitetura de micro serviços, dado sua orquestração permitida assim conseguindo escalonar de melhor forma, acredita-se conseguir, assim, extrair o máximo que o \emph{hardware} tem a oferecer sem a necessidade de reduzir a aplicação. 
 
 
 \bibliographystyle{sbc}
 \bibliography{sbc-template}
-
+\label{fimdotexto}
 
 \end{document}
