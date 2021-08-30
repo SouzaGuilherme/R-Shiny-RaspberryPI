@@ -215,7 +215,7 @@ O limite de usuários, 20 no server e 4 na Raspberry, foi determinado em funçã
 
 A análise dos resultados do experimento é focado na avaliação do uso dos recursos de hardware disponível durante o período de tempo em que o número total de usuários simultâneos se encontra ativo. Os gráficos desta seção representam os diferentes estados das sessões executadas pelos diferentes usuários ativos. Nestes gráficos, as linhas representam as sessões e, no plano horizontal, a passagem do tempo. O período de tempo que interessa a análise é aquele entre os instantes de tempo 0~s, representando o momento em que todos os usuários simultâneos encontram-se ativos, e 120~s, que corresponde aos 2 minutos observados de duração da sessão típica considerada. 
 
-Em um primeiro momento observamos a execução com somente um trabalhador, Figura~\ref{x64_1wroker}, com o intuito de averiguar seu comportamento com somente um usuário ativo. Podemos observar tanto no \emph{server} quanto na Raspberry PI3, Figura ~\ref{PI3_1wroker}, tendem a ficar ociosos (parte cinza), dada a baixa demanda por cálculos. 
+Em um primeiro momento observamos a execução com somente um usuário ativo em ambas arquiteturas, Figura~\ref{fig:x64}.a e Figura~\ref{fig:PI3}.a. É possível observar que, em ambos casos, a taxa de ociosidade os processadores, representado pela cor cinza, é significativa observar tanto no \emph{server} quanto na Raspberry PI3, Figura ~\ref{PI3_1wroker}, tendem a ficar ociosos (parte cinza), dada a baixa demanda por cálculos. 
 
 Em uma nova execução aumentando o número de trabalhadores para 10, Figura ~\ref{x64_10wroker}, notamos que no \emph{server} é realizado um bom aproveitamento da ociosidade do servidor. O mesmo acontece quando passa a ter 20 trabalhadores, porém ao observar a Figura ~\ref{x64_20wroker}, notamos pouca ociosidade, assim, não permitindo a execução de novos trabalhadores.
 
@@ -225,54 +225,22 @@ Diferentemente do \emph{server}, dado o pouco poder computacional da Raspberry P
 
 \begin{figure}[htbp]
   \centering 
-  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_x64_1_worker.png}
-  \caption{Resultado da execução do simulador no \emph{server}, tempo demandado em cada evento com 1 \emph{worker}}
-  \label{x64_1wroker}
+  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_x64_1_worker.png}\\(a) 1 usuário
+    \includegraphics[scale=.4]{paperWSCAD2021/figures/user_x64_10_worker.png}\\(a) 10 usuários
+  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_x64_20_worker.png}\\(a) 20 usuários
+\caption{Traço de execução do simulador no servidor x86.}
+  \label{fig:x64}
 \end{figure}
+
 
 \begin{figure}[htbp]
   \centering 
-  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_x64_10_worker.png}
-  \caption{Resultado da execução do simulador no \emph{server}, tempo demandado em cada evento com 10 \emph{workers}}
-  \label{x64_10wroker}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering 
-  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_x64_20_worker.png}
-  \caption{Resultado da execução do simulador no \emph{server}, tempo demandado em cada evento com 20 \emph{workers}}
-  \label{x64_20wroker}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering 
-  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_1_worker.png}\\(a) 1 usuário
- \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_2_worker.png}\\(a) 2 usuários
- \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_3_worker.png}\\(a) 3 usuários
+  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_1_worker_edit.jpg}\\(a) 1 usuário
+ \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_2_worker_edit.jpg}\\(a) 2 usuários
+ \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_3_worker_edit.jpg}\\(a) 3 usuários
  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_4_worker.png}\\(a) 4 usuários
 \caption{Traço de execução do simulador na Raspberry PI3.}
-  \label{PI3_1wroker}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering 
-  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_2_worker.png}
-  \caption{Resultado da execução do simulador na Raspberry PI3, tempo demandado em cada evento com um \emph{worker}}
-  \label{PI3_2wroker}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering 
-  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_3_worker.png}
-  \caption{Resultado da execução do simulador na Raspberry PI3, tempo demandado em cada evento com três \emph{workers}}
-  \label{PI3_3wroker}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering 
-  \includegraphics[scale=.4]{paperWSCAD2021/figures/user_PI3_4_worker.png}
-  \caption{Resultado da execução do simulador na Raspberry PI3, tempo demandado em cada evento com quatro \emph{workers}}
-  \label{PI3_4wroker}
+  \label{fig:PI3}
 \end{figure}
 
 \section{Conclusão} \label{sec:conlusao}
