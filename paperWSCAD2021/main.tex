@@ -57,12 +57,13 @@
     
 \en
 \begin{abstract}
-
+The use of servers is widespread in practically all computing areas. Notwithstanding this, the concern with the search for solutions aimed at reducing energy use is also a reality. In this article, we present the use of a Small Business Computer (SLC), the Raspberry-Pi, as a low-cost alternative to provide application server services developed using the R language together with R-Shiny. To do so, a Raspberry Pi device was configured and compared to its performance, with an X64 architecture server. Scenarios and performance testing tools were applied and, through these, it was possible to evaluate and verify that the small board supports serving a low number of users without the use of any tuning technique, thus confirming the veracity of the initially proposed premise .
 
 \end{abstract}
 
 \br
-\begin{resumo} 
+\begin{resumo} (rascunho por Giovani)
+O uso de servidores esta difundido em praticamente todas as áreas computacionais. Não obstante a isso, a preocupação com a busca de soluções atentas à redução do uso de energia, também é uma realidade.  Apresentamos neste artigo o uso de um Small Business Computer (SLC), o Raspberry Pi, como uma alternativa de baixo custo para prover serviços de servidor de aplicação desenvolvida utilizando a linguagem R juntamente com R-Shiny. Para tal, um dispositivo Raspberry Pi foi configurado e confrontado quanto a sua performance, com um servidor de arquitetura X64. Cenários e ferramentas de testes de desempenho foram aplicados e, por meio destes, pôde-se avaliar e constatar que a \emph{small board} suporta atender um baixo número de usuários sem a utilização de quaisquer técnica de \emph{tuning}, assim, confirmando a veracidade da premissa inicialmente proposta.
 
 
 \end{resumo}
@@ -71,25 +72,41 @@
 
 \section{Introdução}
 
-Métricas de controle de qualidade e resultados ajudam a avaliar a confiança das previsões em estudos individuais.R é uma ferramenta livre que oferece grande potencial para manipulação e visualização de massas de dados. Shiny é um pacote para R que permite que servidores disponibilizem recursos para visualizações R. Existem outras, X e Y, que oferecem soluções semelhantes, porém, em um contexto proprietário.  Com arquitetura igualmente livre, a placa Raspberry Pi - um minicomputador que tem todo o seu hardware integrado em uma placa única, inicialmente desenvolvida em 2006 por Eben Upton e equipe (Werner 2015) - possui um custo baixo de aquisição, tamanho pequeno e baixo consumo energético. Ela é versátil, podendo ser usado para os mais diferentes tipos de aplicações, inclusive provendo serviços nativos a servidores (dados, web, serviços). Um dado interessante é que o Raspberry Pi 3 foi selecionado como o SBC (single board computer) mais popular, entre 81 placas Linux / Android, numa pesquisa abrangente conduzida pela Linux Foundation em 2016 (Brown, 2016.
+A decisão por realizar, ou não, um investimento financeiro passa, muitas vezes, pela análise de uma grande
+massa de dados. Os setores agrícolas e de obras civis possuem situações onde esta análise tem relevada importância, considerando aspectos hidrológicos. No contexto da agricultura, a decisão
+por uma cultura, pelo agricultor, ou pela taxa de juros a ser aplicada, por uma entidade voltada ao
+financiamento rural, depende da análise, entre outros, dos regimes hídricos do local onde a plantação ou
+a aplicação dos recursos será realizada. Dependente também da análise dos regimes hídricos dependem
+decisões sobre implantação de infraestruturas civis, como pontes, barragens para reservatórios aquíferos
+ou geração de energia e mesmo para dimensionamento de telhados de imóveis. A pura visualização de
+grande massas dados, por si, é complexa. Torna-se ainda mais complexa quando a visualização depende
+do tratamento dos dados segundo modelos que regem a análise do problema a ser considerado.
 
-Equipamentos servidores, independentemente das tarefas a que são submetidos, demandam consumo energético constante e ininterrupto e, por óbvio, é interessante buscar soluções que reduzam o uso de energia, provendo assim economia ou ganho financeiro.
+Para atender a necessidade de análise da grande massa de dados associadas aos aspectos hídricos, foi desenvolvida a aplicação WebSYHDA \cite{syhda}. O WebSYHDA é uma ferramenta, disponibilizada na Web, para aplicação de modelos hídricos e apresentação de gráficos com o resultado destes. A
+ferramenta oferece um conjunto de recursos que permite a aplicação de diferentes modelos hídricos sobre
+séries temporais registrando dados como móveis de rios, vazão e índices de precipitação. O WebSYHDA
+foi desenvolvido em R, com apoio do pacote de visualização Shiny. Implantado em um servidor R, essa
+ferramenta foi projetada para atender diferentes usuários simultaneamente.
 
-Nesse interim, as métricas de desempenho, que são valores brutos que provem a base para alguma forma de pesquisa ou estudo e podem ser compostos por valores de diversas categorias e formato, tem a finalidade de quantificar objetivamente as funções de coletas de dados de avaliação e desempenho. Objetivamente, este trabalho busca avaliar e mensurar a o poder de escalabilidade de servidores web R, utilizando Shiny.
+Enquanto um serviço R, o suporte de operação do WebSYHDA é realizado de forma convencional pelo servidor Shinyapps.io\footnote{Shinyapps.io: \url{https://www.shinyapps.io/}} . Nessa etapa do trabalho busca-se avaliar as necessidades de
+estrutura física para suportar esse serviço. O presente artigo avalia a escalabilidade em termos de número
+de usuários WebSyhda ativos simultaneamente em dois modelos de arquitetura: um servidor convencional
+e um dispositivo de borda (\emph{small board}). No contexto do trabalho realizado, as métricas de desempenho, que são valores brutos que provem a base para alguma forma de pesquisa ou estudo e podem ser compostos por valores de diversas categorias e formato, tem a finalidade de quantificar objetivamente as funções de coletas de dados de avaliação e desempenho.
+O caso de estudo encaminhado considera o serviço WebSYHDA, desenvolvido com a finalidade de processamento complexo de séries hidrológicas. São consideradas duas plataformas de suporte: um servidor com arquitetura convencional e um dispositivo de baixa capacidade (\emph{small board}). 
+%O objetivo deste estudo é identificar componentes do software, atualmente construído de forma monolítica, na forma de microserviços.
 
-O caso de estudo encaminhado considera o serviço WebSYHDA. Um serviço desenvolvido com a finalidade de processamento complexo de séries hidrológicas. São consideradas duas plataformas de suporte: um servidor com arquitetura convencional e um dispositivo de baixa capacidade (small board). O objetivo deste estudo é identificar componentes do software, atualmente construído de forma monolítica, na forma de microserviços.
+O presente artigo está organizado da seguinte forma: na Seção~\ref{sec:TrabalhosRelacionados} serão apresentados trabalhos relacionados, na Seção~\ref{sec:websyhda} é apresentada a aplicação utilizada como \emph{benchmark}. A Seção~\ref{sec:metodologia} são apresentadas as ferramentas utilizadas para realização dos experimentos. Na Seção~\ref{sec:Resultados}, são descritos os resultados obtidos considerando os cenários representativos. As considerações finais e trabalhos futuros se encontram na Seção~\ref{sec:conlusao}.
 
-\section{Trabalhos Relacionados  - reescrito por Giovani rascunho para avaliação} \label{sec:TrabalhosRelacionados}
+\section{Trabalhos Relacionados} \label{sec:TrabalhosRelacionados}
 
-O estudo da escalabilidade de servidores no atendimento aos usuários é constante na literatura [citações
-genéricas são bem vindas]. Nos últimos anos, esse estudo passou a incluir a análise das questões
-energéticas [outras refs]. Neste contexto, o uso de dispositivos de borda, os chamados \emph{small
+O estudo da escalabilidade de servidores no atendimento aos usuários é constante na literatura \cite{generic1}, \cite{generic5}, \cite{generic3}, \cite{generic4}. Nos últimos anos, esse estudo passou a incluir a análise das questões
+energéticas \cite{generic6}, \cite{generic7}, \cite{generic8}. Neste contexto, o uso de dispositivos de borda, os chamados \emph{small
 boards}, em substituição a servidores convencionais tem se apresentado como alternativa. No estudo de caso documento neste artigo, é considerada uma aplicação desenvolvida sob um servidor R.
 
-Inicialmente, com um propósito similar ao WebSYHDA, no que tange ao uso de R e a estrutura Shiny, cita-se o  trabalho de Ekiz et al (2020) que utiliza os referidos recursos para criar uma aplicação web denominada Cluster Identity PRedictor (CIPR), disponível em GitHub, que fornece uma interface gráfica de usuário para pontuar perfis de expressão gênica de clusters de células.
-Em outro contexto, a finalidade de criar um servidor de arquivos utilizando um Raspberry PI, para guardar os dados e poder compartilhar na rede, fora objeto de estudo de Bruschi (2016). Este concluiu que o dispositivo pode ser utilizado com o propósito em questão, com economia de custos sem, contudo, deixar de ser viável para esta aplicação, observando-se apenas algumas variações de desempenho dependendo do tipo de armazenamento.
+Inicialmente, com um propósito similar ao WebSYHDA, no que tange ao uso de R e a estrutura Shiny, cita-se o  trabalho de \cite{CIPR} que utiliza os referidos recursos para criar uma aplicação web denominada \emph{Cluster Identity PRedictor}\footnote{Cluster Identity PRedictor: \url{https://github.com/atakanekiz/CIPR-Package}} (CIPR), que fornece uma interface gráfica de usuário para pontuar perfis de expressão gênica de \emph{clusters} de células.
+Em outro contexto, a finalidade de criar um servidor de arquivos utilizando um Raspberry Pi, para guardar os dados e poder compartilhar na rede, fora objeto de estudo de Bruschi (2016). Este concluiu que o dispositivo pode ser utilizado com o propósito em questão, com economia de custos sem, contudo, deixar de ser viável para esta aplicação, observando-se apenas algumas variações de desempenho dependendo do tipo de armazenamento.
 
-O Raspberry Pi também foi utilizado, conforme Azevedo (2019), para propor a viabilidade de sua utilização em hospedar um honeypot, mostrando que sua efetividade irá depender da eficiência do software utilizado e também do tamanho e complexidade da rede em que ficará esse dispositivo, para dar efetividade ao objetivo proposto. Também dentro desse contexto de propor funcionalidades "servers" ao Raspberry Pi, Rafael et al (2013), outrora já mostrara que o uso de um computador de baixo custo - o Raspberry-Pi, pode ser usado de forma segura como um servidor web,  propiciando economia de energia.
+A Raspberry Pi também foi utilizado, conforme Azevedo (2019), para propor a viabilidade de sua utilização em hospedar um honeypot, mostrando que sua efetividade irá depender da eficiência do software utilizado e também do tamanho e complexidade da rede em que ficará esse dispositivo, para dar efetividade ao objetivo proposto. Também dentro desse contexto de propor funcionalidades "servers" ao Raspberry Pi, Rafael et al (2013), outrora já mostrara que o uso de um computador de baixo custo - o Raspberry-Pi, pode ser usado de forma segura como um servidor web,  propiciando economia de energia.
 
 [Oliveira and Ataides 2017] propôs avaliar a substituição do hardware convencional por um hardware de baixo consumo que respeite o Service-Level-Agreement (SLA) e reduza o consumo de energia dos data centers, assim tornando viável o uso de uma em uma nuvem computacional. A proposta incluiu a implementação de um Raspbarry PI B+ como um nodo computacional de baixo consumo energético. Para tal, adaptações na arquitetura e no hipervisor  se fizeram necessárias.
 
@@ -113,21 +130,9 @@ A plataforma em sua versão atual, conta com diversas funcionalidades, bem como:
 
 \subsection{Linguagem R} \label{sec:R}
 
-R é uma linguagem e ambiente com foco em computação estatística e gráficos. Assim, R permite desenvolver e publicar gráficos bem projetados \cite{whatR}, semelhantemente a C/C++ e outras linguagens disponíveis no mercado, R também permite o desenvolvimento por meio de módulos, mas ainda se tratando de uma unica e grande aplicação.
-%Colocar sobre a forma de escalabilidade do R aqui?!
-
-Com isso vale ressaltar que R é uma aplicação de thread único, o que significa que um aplicativo não pode atender a dois usuários diferentes precisamente ao mesmo tempo, Figura ~\ref{singleThreads}. Em muitas aplicações isso não é um problema, porque a maioria dos cálculos leva apenas dezenas ou centenas de milissegundos. Como resultado, um único processo R geralmente pode atender de 5 a 30 solicitações por segundo \cite{ShinyappsEscalabilidade}. 
+R é uma linguagem e ambiente com foco em computação estatística e gráficos. Assim, R permite desenvolver e publicar gráficos bem projetados \cite{whatR}, semelhantemente a C/C++ e outras linguagens disponíveis no mercado, R também permite o desenvolvimento por meio de módulos, mas ainda se tratando de uma única e grande aplicação. Desta forma, aplicações R são executadas em thread único, não sendo possível o atendimento de dois, ou mais, usuários simultaneamente. Para as aplicações em que os cálculos possuem baixa granularidade, na ordem de poucas dezenas ou centenas de milissegundos, o fato da aplicação ser mono-thread não gera grande impacto na experiência do usuário: um único processo R  pode atender de 5 a 30 solicitações por segundo \cite{ShinyappsEscalabilidade}. 
 
 Entre tanto, para uma aplicação como o WebSYHDA e outras, onde a simultaneidade entre usuários podem ocorrer de forma frequente, acaba por resultar em respostas demoradas para os demais usuário, dado a dependência do tempo de processamento para o cálculo que estiver em execução. A fim de ganho em desempenho para compensar o número de usuários, o escalonamento de hardware pode ser feito, porem o emprego de \emph{hardware} para suporte pode ser empregada de forma pouco eficiente dado a configuração de balanceamento permitida. %De mesma maneira ocorre se houver o uso insuficiente, onde o custo por hardware ocioso deixa a desejar.
-
-%Resaltar casos onde nao atenda
-
-\begin{figure}[htbp]
-  \centering 
-  \includegraphics[scale=.4]{figures/single_threads.jpg}
-  \caption{Exemplo de uma execução sequencial \cite{singleThreads}}
-  \label{singleThreads}
-\end{figure}
 
 \subsection{Shiny} \label{sec:Shiny}
 
@@ -138,51 +143,44 @@ Assim, torna-se possivel apresentar gráficos dinâmicos e interativos por meio 
 
 \section{Metodologia} \label{sec:metodologia}
 
-Visto que a demanda de serviços \textit{web} ocupa a maior parte das aplicações na nuvem, maiores são os esforços para otimização das aplicações para um menor consumo de requisitos e rede, mantendo, no entanto, níveis de desempenho aceitáveis aos usuários. 
+Visto que a demanda de serviços \textit{web} ocupa a maior parte das aplicações na nuvem, maiores são os esforços para otimização das aplicações para um menor consumo de requisitos e rede, mantendo, no entanto, níveis de desempenho aceitáveis aos usuários. Neste trabalho o aspecto tratado é o dimensionamento das necessidades de hardware para atender a demanda de processamento do WebSyhda. O estudo de caso avalia o desempenho obtido com uma arquitetura padrão x64 convencional com uma \emph{smallboard} modelo Raspberry PI 3. O objetivo do estudo é, considerando a natureza sequencial de atendimento às solicitações, determinar se este \emph{smallboard} apresenta a mesma eficiência de atendimento a uma aplicação real, o WebSyhda, que a já observada em trabalhos anteriores  \cite{silva2019estudo}.
 
-Baseada na premissa supracitada, para este trabalho fizemos uso de uma aplicação real, o WebSYHDA como mecanismo de teste, que permitiu equiparar \emph{hardware} de arquitetura x64 com a \emph{smallboard} selecionado, Raspberry PI 3, dada a eficiência apresentada pelo dispositivo em trabalhos anteriores e a capacidade de atender cenários de demanda \emph{web} \cite{silva2019estudo}.
-
-Para simulação de carga fizemos uso da ferramenta \emph{Shinycannon}, a qual nos permite simular usuários simultaneos realizando ações no aplicativo. Assim atendendo nossas exigências em quantativar numero de usuários suportados e latência do aplicativo.
-
-
+O procedimento de avaliação empregou a exploração do servidor R nas duas arquiteturas. A carga de trabalho ao qual estes servidores responderam correspondeu a demanda gerada por traços obtidos de consultas reais. A carga foi submetida aos respectivos servidores pela  ferramenta \emph{Shinycannon}, permitindo quantificar o número de usuários suportados e latência do aplicativo.
 
 
 \subsection{Shinycannon} \label{sec:Shinycannon}
 
 \textit{Shinycannon}\footnote{Shinycannon: \url{https://github.com/rstudio/shinycannon}} é uma ferramenta de linha de comando que possibilita testes de carga em aplicativos R. Assim, permitindo aos desenvolvedores analisarem a escalabilidade de seu aplicativo simulando de um a n usuários simultaneos.
 
-A ferramenta acompanha o pacote \textit{shinyloadtest}\footnote{Shinyloadtest: \url{https://rstudio.github.io/shinyloadtest}}, mantido pela própria Rstudio. O pacote é responsavel por gerar uma gravação de uma sessão de usuário, essas sessões podem ser criadas pensando no uso tipico do aplicativo desenvolvido\cite{shinyloadtest}. A sessão é criada de forma manual, após a inicialização do pacote o tester executa a interação com o aplicativo de forma natual, assim como um usuário comum. Ao terminar seu uso basta fechar a aplicação para que o pacote encerre a gravação da sessão.
-
-Com isso, por sua vez, a \textit{Shinycannon} permite a criação de trabalhadores, que são os usuários simulados, podendo criar tantos quantos necessarios para execução dos testes. Assim para execução dos teste devemos definir o numero de trablhadores e o tempo total da sessão que será executada pelos mesmos. 
-
-Em suma, a \textit{Shinycannon} replica os passos da gravação criada pelo pacote \textit{Shinyloadtest} entre seus trabalhadores (usuários), fazendo com que cada trabalhador execute simultaneamente a mesma sessão durante o tempo definido pelo desenvolvedor.
+A ferramenta acompanha o pacote \textit{shinyloadtest}\footnote{Shinyloadtest: \url{https://rstudio.github.io/shinyloadtest}}, mantido pela própria Rstudio. O pacote é responsável por gerar uma gravação de uma sessão real de usuário, a qual deve representar o uso típico do serviço a ser avaliado\cite{shinyloadtest} e a qual servirá como base para o estudo do comportamento. A partir desta sessão gravada, durante um intervalo de tempo parametrizado, diversos usuários podem ser simulados executando o mesmo conjunto de operações. Como resultado da simulação de operação, são oferecidos diferentes informações sobre o atendimento do serviço, como tempos de utilização de CPU e de espera do usuário por respostas.
 
 \subsection{Hardware}\label{sec:Hardware}
-Com a popularização do uso de serviços providos pela computação em nuvem, o consumo energético dos data centers também aumentou, chegando a 270 TWh em 2012 \cite{VanHeddeghem:2014:TWI:2657027.2657141}, estimando chegar a mais de 2\% do consumo da energia mundial apos 2020 \cite{energy}.  Buscando alternativas de evitar esse alto consumo energético das máquinas convencionais utilizadas em data centers, o uso de dispositivos com arquitetura ARM, que possuem baixo consumo energético, são uma das estratégias possíveis.
+Com a popularização do uso de serviços providos pela computação em nuvem, o consumo energético dos data centers também aumentou, chegando a 270 TWh em 2012 \cite{VanHeddeghem:2014:TWI:2657027.2657141}, estimando chegar a mais de 2\% do consumo da energia mundial apos 2020 \cite{energy}. Buscando alternativas de evitar esse alto consumo energético das máquinas convencionais utilizadas em data centers, o uso de dispositivos com arquitetura ARM, que possuem baixo consumo energético, são uma das estratégias possíveis.
 
-Assim, o dispositivo de teste escolhido foi a \emph{smallboard} Raspberry PI3, dada sua arquitetura ARM aberta, comunidade participativa em inumeros projetos alem de sua alta disponbilidade no mercado. As especificacoes do device podem ser observadas na Tabela ~\ref{tab:especificacao}.
+Neste trabalho, é analisado a capacidade de resposta de um Raspberry PI3 no atendimento aos serviços providos pelo WebSyhda com o oferecido por uma arquitetura x64 convencional. As características destes dois equipamentos são apresentadas na Tabela \ref{tab:specs}. 
 
 \begin{table}[h]
 \centering
-\caption{TESTE}
-\begin{tabular}{l|c|c}
+\caption{Especifícação de \textit{hardware} do dispositivo}
+\begin{tabular}{c|c|c}
 \hline
-\multicolumn{1}{c|}{\textbf{Especifícação}}            & \textbf{Server x64} & \textbf{Raspberry PI3}                                                   \\ \hline
-\textbf{Processador}                                   & XXX                 & \begin{tabular}[c]{@{}c@{}}BCM2837 64bit\\ Quad Core 1.2GHz\end{tabular} \\ \hline
-\textbf{Arquitetura}   & XXX & ARMv8             \\ \hline
-\textbf{RAM}           & XXX & 1 GB SDRAM 400MHz \\ \hline
-\textbf{Armazenamento} & XXX & Micro SD          \\ \hline
-\multicolumn{1}{c|}{\textbf{Máxima corrente / Tensão}} & XXX                 & 2.4A/5V                                                                  \\ \hline
+\textbf{Especifícação}            & \textbf{Server x64} & \multicolumn{1}{l}{\textbf{Raspberry PI3}} \\ \hline
+\textbf{Processador} &
+  \begin{tabular}[c]{@{}c@{}}Intel(R) Xeon(R) CPU \\ E3-1220 v3 @ 3.10GHz\end{tabular} &
+  \begin{tabular}[c]{@{}c@{}}BCM2837 64bit \\ Quad Core 1.2GHz\end{tabular} \\ \hline
+\textbf{Arquitetura}              & x64                 & ARMv8                                      \\ \hline
+\textbf{RAM}                      & 8GB                 & 1GB                                        \\ \hline
+\textbf{Armazenamento}            & HD                  & Micro SD                                   \\ \hline
+\textbf{Máxima corrente / Tensão} & 16A/+12V1           & 2.4A/5V                                    \\ \hline
 \end{tabular}
-\label{tab:especificacao}
+\label{tab:specs}
 \end{table}
     
 Para comparativo de desempenho, utilizou-se um dispositivo de arquitetura x64.
-O \textit{server} selecionado para tal comparativo, tem suas especificações presente na Tabela ~\ref{tab:especificacao}, informações obtidas pelo comando \textit{dmidecode}, o qual apresenta todas informações disponíveis sobre o dispositivo, possibilitando uma pesquisa mais especifica dentro dele atribuindo ao comando \textit{dmidecode --type} concatenado com uma chave da tabela de representação do comando, como a chave quatro, nos demonstrará todas especificações do processador e assim por diante.
+O \textit{server} selecionado para tal comparativo, tem suas especificações presente na Tabela ~\ref{tab:specs}, informações obtidas pelo comando \textit{dmidecode}, o qual apresenta todas informações disponíveis sobre o dispositivo, possibilitando uma pesquisa mais especifica dentro dele atribuindo ao comando \textit{dmidecode --type} concatenado com uma chave da tabela de representação do comando, como a chave quatro, nos demonstrará todas especificações do processador e assim por diante.
 
 \subsection{Metodologia dos Testes}\label{sec:MetodologiaDosTestes}
-A fim de testar o aplicativo no seu estágio atual de desenvolvimento e também encontrar cargas próximas ao limite da Raspberry PI, consideramos a documentação como base, onde a mesma demonstra qual seria aproximadamente o limite de tempo de resposta do aplicativo dada a quantidade de usuários \cite{documentShiny}.
-
+A fim de testar o aplicativo no seu estágio atual de desenvolvimento e também encontrar cargas próximas ao limite da Raspberry PI3, consideramos a documentação como base, onde a mesma demonstra qual seria aproximadamente o limite de tempo de resposta do aplicativo dada a quantidade de usuários \cite{documentShiny}.
 
 %Em um primeiro momento, analisamos o uso mais comum do sw, ou seja, seu uso diário por engenheiros hídricos, a Figura ~\ref{usoWebSYHDA} demonstra o conjunto de ações tomada dentro do aplicativo. Com isso utilizamos o pacote \emph{shinyloadtest}, assim permitindo a gravação deste conjunto de passos. 
 Em um primeiro momento, buscou-se um teste que fosse característico de um fluxo típico de um usuário, fazendo uso de várias técnicas empregadas em diversas análises hidrológicas, porém com foco em tarefas que requerem maior processamento. Optou-se por utilizar o módulo de Análise de Frequência Regional para o teste, visto que o mesmo atende ao critério de uso anterior, assim como a exigência de múltiplos arquivos para computar os resultados. A Figura ~\ref{usoWebSYHDA} ilustra o conjunto de ações tomada para execução do teste dentro do aplicativo, sendo estas:
@@ -191,15 +189,13 @@ Em um primeiro momento, buscou-se um teste que fosse característico de um fluxo
 
 % descrição dos passos da Figura 2 (joão)
 \begin{enumerate}[i.]
-  \item Importar arquivos locais: importar 10 arquivos do Hidroweb, contendo dados de vazão;
-  \item Aplicar filtros: aplicar o limiar de falhas de 31 dias para filtrar as séries;
-  \item Constituir séries anuais: selecionar o período anual para transformar as séries diárias em anuais;
-  \item Selecionar arquivos importados: no módulo de Análise de Frequência Regional, é possível selecionar, dentre os arquivos importados, quais serão utilizados na análise. Neste caso, todos foram selecionados;
-  \item Análise de frequência regional: executar a análise. A partir dos dados, são computados os Momentos-L de cada série anual, as medidas de heterogeneidade da região e a sua função regional;
-  \item Vizualizações geradas: tabelas com os resultados são geradas, assim como o gráfico da função regional.
+  \item Importar arquivos. A primeira etapa consistem em importar, para o servidor, um total de 10 arquivos do Hidroweb\footnote{https://www.snirh.gov.br/hidroweb}, contendo dados de vazão da região a ser analisada.
+  \item Aplicação de filtros. Aplicar o limiar de falhas de 31 dias para filtrar as séries. \textcolor{red}{O que significa isso?}
+  \item Constituir séries anuais. Selecionar o período anual para transformar as séries diárias em anuais.
+  \item Selecionar arquivos importados. No módulo de Análise de Frequência Regional  é possível selecionar, dentre os arquivos importados, quais serão utilizados na análise. No estudo realizado foram selecionados todos os 10 arquivos.
+  \item Análise de frequência regional. Aplicação do modelo. A partir dos dados, são computados os Momentos-L de cada série anual, as medidas de heterogeneidade da região e a sua função regional.
+  \item Visualização. Tabelas e gráficos representando os resultados da aplicação do modelo são gerados.
 \end{enumerate}
-
-
 
 \begin{figure}[htbp]
   \centering 
@@ -209,7 +205,7 @@ Em um primeiro momento, buscou-se um teste que fosse característico de um fluxo
 \end{figure}
 
 Inicialmente partimos com um conjunto de execuções teste afim de entender o simulador e as possibilidades fornecidas por ele. Seguindo as indicações da documentação e observando o tempo comum de trabalho de um usuário do \emph{WebSYHDA}, concluímos que %mudar isso
-dois minutos representa mais de uma execução do conjunto de passos propostos, o que demonstra uma maior realidade de uso do aplicativo. Assim sendo, utilizamos dois minutos como limite de tempo de execução da ferramenta para nossa coleta.
+dois minutos representam mais de uma execução do conjunto de passos propostos, o que demonstra uma maior realidade de uso do aplicativo. Assim sendo, utilizamos dois minutos como limite de tempo de execução da ferramenta para nossa coleta.
 
 
 
@@ -303,5 +299,14 @@ Com isso, como trabalhos futuros, pretende-se fazer uso de técnicas de \emph{tu
 
 \bibliographystyle{sbc}
 \bibliography{sbc-template}
+
+{\colo{red}\textbf{Retirado da Introdução:}
+%Métricas de controle de qualidade e resultados ajudam a avaliar a confiança das previsões em estudos individuais.
+R é uma ferramenta livre que oferece grande potencial para manipulação e visualização de massas de dados. Shiny é um pacote para R que permite que servidores disponibilizem recursos para visualizações R. 
+%Existem outras, X e Y, que oferecem soluções semelhantes, porém, em um contexto proprietário.  
+Com arquitetura igualmente livre, a placa Raspberry Pi - um minicomputador que tem todo o seu hardware integrado em uma placa única, inicialmente desenvolvida em 2006 por Eben Upton e equipe, %(Werner 2015) - 
+possui um custo baixo de aquisição, tamanho pequeno e baixo consumo energético. Ela é versátil, podendo ser usado para os mais diferentes tipos de aplicações, inclusive provendo serviços nativos a servidores (dados, \emph{web}, serviços). 
+%Um dado interessante é que o Raspberry Pi 3 foi selecionado como o SBC (single board computer) mais popular, entre 81 placas Linux / Android, numa pesquisa abrangente conduzida pela Linux Foundation em 2016 (Brown, 2016.
+Equipamentos servidores, independentemente das tarefas a que são submetidos, demandam consumo energético constante e ininterrupto e, por óbvio, é interessante buscar soluções que reduzam o uso de energia, provendo assim economia ou ganho financeiro. }
 
 \end{document}
